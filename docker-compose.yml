@@ -1,0 +1,18 @@
+services:
+  php:
+    image: luisclaudiomeca/laravel11-php8-fpm
+    container_name: php
+    ports:
+      - 9000
+    volumes: 
+      - ./laravel:/var/www/html
+
+  server:
+    image: nginx
+    container_name: server
+    ports:
+      - 80:80
+    restart: always
+    volumes:
+      - ./config/nginx:/etc/nginx/conf.d
+      - ./laravel:/var/www/html
