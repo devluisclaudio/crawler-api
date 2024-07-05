@@ -8,7 +8,9 @@
         "php": "^8.2",
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^2.9"
+        "laravel/tinker": "^2.9",
+        "symfony/dom-crawler": "^7.1",
+        "youthage/laravel-geohash": "^3.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
