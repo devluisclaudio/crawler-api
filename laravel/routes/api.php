@@ -14,5 +14,6 @@ Route::prefix('v1')->group(function () {
     });
     Route::prefix('pr')->group(function () {
         Route::resource('menorpreco', ParanaMenorPreco::class);
+        Route::get('menorpreco/categoria/combustiveis', [ParanaMenorPreco::class, 'combustivel']);
     });
 });

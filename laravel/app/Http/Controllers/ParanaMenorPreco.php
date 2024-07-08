@@ -16,7 +16,7 @@ class ParanaMenorPreco extends Controller
     }
 
 
-    public function index(Request $request)
+    public function combustivel(Request $request)
     {
 
         try {
@@ -42,6 +42,45 @@ class ParanaMenorPreco extends Controller
             return response()->json([
                 'data' => $postosDecoderLatLong
             ]);
+        } catch (Exception $ex) {
+            report($ex);
+            return response()->json($ex->getMessage(), 500);
+        }
+    }
+
+    public function index(Request $request)
+    {
+
+        try {
+            if (isset($request->search) && !empty($request->search))
+                $search = $request->search;
+
+            if (isset($request->category) && !empty($request->category))
+                $category = $request->category;
+
+            if (empty($search))
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Parametro search=? não pode ser vazio'
+                ], 400);
+
+            if (empty($category))
+                $json = $this->repository->getBuscaCategorias($search);
+            else
+                $json = $this->repository->getBuscaProdutos($search, $category);
+
+
+            if ($json) {
+                $ojbect = json_decode($json);
+
+                if (!empty($category)) {
+                    $postosDecoderLatLong = $this->repository->tratarGeoHash($ojbect->produtos);
+                    return response()->json(['data' => $postosDecoderLatLong]);
+                }
+
+                return response()->json(['data' => $ojbect]);
+            }
+            return response()->json(['data' => $json]);
         } catch (Exception $ex) {
             report($ex);
             return response()->json($ex->getMessage(), 500);
